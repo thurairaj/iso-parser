@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <title>Encryption / Decryption</title>
+</head>
+<body>
+<div class="container">
+    <form>
+        <div class="row">
+            <div class="col-5 align-items-center">
+                <div class="p-3">
+                    <label for="completeBuffer" class="form-label">Complete Buffer</label>
+                    <textarea class="form-control" id="completeBuffer" rows="6">00ac600365000012003232333030303336001b00503020078020c01a04000000000000000680000006005100000365008e1aa2a35f5aa3a0f4e19a278c95b8cc7415f9919afd07131541aab0fd93ed3000cbd2206711c413a5b5ddcb2c946975a765e8c9526586c5290994090d4fe26d3100a9f35ac846a2408104e303675ff1d474ef1167b86e9500003300000000010020820238008407a0000000041010950508000480000006303030303031</textarea>
+                </div>
+                <div class="d-row gap-1 col-10 mx-auto">
+                    <button type="button" class="btn btn-primary mb-3" onclick="analyze()">Analyze</button>
+                    <button type="button" class="btn btn-primary mb-3" onclick="parse()">Parse</button>
+                </div>
+            </div>
+
+            <div class="col-5 align-items-center">
+                <div class="p-3">
+                    <label for="plainIso" class="form-label">Plain ISO</label>
+                    <textarea class="form-control" id="plainIso" rows="6">1234600161039902003020078020C0020400000000000000051100170400710001016100374966230338769299D230320100000010001680313031333139383830303030323730303130343035313800989F02060000000005119F03060000000000009F1A020458950500000000005F2A0204589A032106179C01009F370466A139B1820200009F360204519F26081D4D5DE0BA9449329F2701809F100706010A03A000009F6604268040009F6E04207000000006303035393534</textarea>
+                </div>
+            </div>
+        </div>
+        <div id="bitmap" class="row col-10 p-3">
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-1">
+                <label class="form-check-label" for="bit-1"> Bit 1 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-2">
+                <label class="form-check-label" for="bit-2"> Bit 2 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-3">
+                <label class="form-check-label" for="bit-3"> Bit 3 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-4">
+                <label class="form-check-label" for="bit-4"> Bit 4 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-5">
+                <label class="form-check-label" for="bit-5"> Bit 5 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-6">
+                <label class="form-check-label" for="bit-6"> Bit 6 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-7">
+                <label class="form-check-label" for="bit-7"> Bit 7 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-8">
+                <label class="form-check-label" for="bit-8"> Bit 8 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-9">
+                <label class="form-check-label" for="bit-9"> Bit 9 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-10">
+                <label class="form-check-label" for="bit-10"> Bit 10 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-11">
+                <label class="form-check-label" for="bit-11"> Bit 11 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-12">
+                <label class="form-check-label" for="bit-12"> Bit 12 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-13">
+                <label class="form-check-label" for="bit-13"> Bit 13 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-14">
+                <label class="form-check-label" for="bit-14"> Bit 14 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-15">
+                <label class="form-check-label" for="bit-15"> Bit 15 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-16">
+                <label class="form-check-label" for="bit-16"> Bit 16 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-17">
+                <label class="form-check-label" for="bit-17"> Bit 17 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-18">
+                <label class="form-check-label" for="bit-18"> Bit 18 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-19">
+                <label class="form-check-label" for="bit-19"> Bit 19 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-20">
+                <label class="form-check-label" for="bit-20"> Bit 20 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-21">
+                <label class="form-check-label" for="bit-21"> Bit 21 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-22">
+                <label class="form-check-label" for="bit-22"> Bit 22 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-23">
+                <label class="form-check-label" for="bit-23"> Bit 23 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-24">
+                <label class="form-check-label" for="bit-24"> Bit 24 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-25">
+                <label class="form-check-label" for="bit-25"> Bit 25 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-26">
+                <label class="form-check-label" for="bit-26"> Bit 26 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-27">
+                <label class="form-check-label" for="bit-27"> Bit 27 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-28">
+                <label class="form-check-label" for="bit-28"> Bit 28 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-29">
+                <label class="form-check-label" for="bit-29"> Bit 29 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-30">
+                <label class="form-check-label" for="bit-30"> Bit 30 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-31">
+                <label class="form-check-label" for="bit-31"> Bit 31 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-32">
+                <label class="form-check-label" for="bit-32"> Bit 32 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-33">
+                <label class="form-check-label" for="bit-33"> Bit 33 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-34">
+                <label class="form-check-label" for="bit-34"> Bit 34 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-35">
+                <label class="form-check-label" for="bit-35"> Bit 35 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-36">
+                <label class="form-check-label" for="bit-36"> Bit 36 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-37">
+                <label class="form-check-label" for="bit-37"> Bit 37 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-38">
+                <label class="form-check-label" for="bit-38"> Bit 38 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-39">
+                <label class="form-check-label" for="bit-39"> Bit 39 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-40">
+                <label class="form-check-label" for="bit-40"> Bit 40 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-41">
+                <label class="form-check-label" for="bit-41"> Bit 41 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-42">
+                <label class="form-check-label" for="bit-42"> Bit 42 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-43">
+                <label class="form-check-label" for="bit-43"> Bit 43 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-44">
+                <label class="form-check-label" for="bit-44"> Bit 44 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-45">
+                <label class="form-check-label" for="bit-45"> Bit 45 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-46">
+                <label class="form-check-label" for="bit-46"> Bit 46 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-47">
+                <label class="form-check-label" for="bit-47"> Bit 47 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-48">
+                <label class="form-check-label" for="bit-48"> Bit 48 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-49">
+                <label class="form-check-label" for="bit-49"> Bit 49 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-50">
+                <label class="form-check-label" for="bit-50"> Bit 50 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-51">
+                <label class="form-check-label" for="bit-51"> Bit 51 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-52">
+                <label class="form-check-label" for="bit-52"> Bit 52 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-53">
+                <label class="form-check-label" for="bit-53"> Bit 53 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-54">
+                <label class="form-check-label" for="bit-54"> Bit 54 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-55">
+                <label class="form-check-label" for="bit-55"> Bit 55 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-56">
+                <label class="form-check-label" for="bit-56"> Bit 56 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-57">
+                <label class="form-check-label" for="bit-57"> Bit 57 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-58">
+                <label class="form-check-label" for="bit-58"> Bit 58 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-59">
+                <label class="form-check-label" for="bit-59"> Bit 59 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-60">
+                <label class="form-check-label" for="bit-60"> Bit 60 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-61">
+                <label class="form-check-label" for="bit-61"> Bit 61 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-62">
+                <label class="form-check-label" for="bit-62"> Bit 62 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-63">
+                <label class="form-check-label" for="bit-63"> Bit 63 </label>
+            </div>
+            <div class="form-check form-check-inline col-1">
+                <input class="form-check-input" type="checkbox" value="" id="bit-64">
+                <label class="form-check-label" for="bit-64"> Bit 64 </label>
+            </div>
+        </div>
+        <div id="parsed" class="row">
+            <div class="col-5 align-items-center">
+                <div class="p-3">
+                    <label for="encryptedBuffer" class="form-label">Encrypted Portion of Buffer</label>
+                    <textarea class="form-control" id="encryptedBuffer" rows="3"  style="color:blue"></textarea>
+                </div>
+            </div>
+            <div class="col-5 align-items-center">
+                <div class="p-3">
+                    <label for="plainBuffer" class="form-label">Need To Be Encrypted</label>
+                    <textarea class="form-control" id="plainBuffer" rows="3"></textarea>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+  function analyze() {
+    const completeBuffer = document.getElementById("completeBuffer").value.toLowerCase();
+    const plainIso = document.getElementById("plainIso").value.toLowerCase();
+    const encryptedPortion = document.getElementById("encryptedBuffer");
+    const plainBuffer = document.getElementById("plainBuffer");
+
+    const terminalId = completeBuffer.substring(18, 34);
+    const startEncrypt = completeBuffer.substring(34, 38);
+    const length = completeBuffer.substring(38, 42);
+
+    const start = 42 + parseInt(startEncrypt, 16) * 2;
+    const end = start + parseInt(length, 16) * 2;
+
+    const plain = plainIso.replace(completeBuffer.substring(42, start), '*').replace(completeBuffer.substring(end), '^');
+    const clearText = plain.substring(plain.indexOf('*')+1, plain.indexOf('^'))
+    console.log(plain)
+
+    encryptedPortion.value = completeBuffer.substring(start, end);
+    plainBuffer.value = clearText;
+    parse();
+  }
+
+  function parse() {
+    const paddingFix = (iso, fieldLength, valueLength, padding) => {
+      if (fieldLength <= valueLength) return iso;
+
+      if (!!padding && padding === 'end') return iso.substring(0, valueLength);
+      else return iso.substring(iso.length - valueLength);
+    }
+    const hexToAscii = (hex) => {
+      return hex.match(/(..?)/g).map(hex => String.fromCharCode(parseInt(hex, 16))).join("")
+    }
+    const getVariableLengthField = (iso, metadata) => {
+      const {lengthMeta, encoding, padding} = metadata;
+
+      const lengthOfLength = lengthMeta.length;
+      const rawLength = parseInt(iso.substring(0, lengthOfLength));
+      const length = encoding === 'hex'
+          ? rawLength % 2 === 1 ? rawLength + 1 : rawLength
+          : rawLength * 2;
+
+      const valueLength = encoding === 'hex' ? rawLength : rawLength * 2;
+      const end = lengthOfLength + length;
+
+      return {
+        rest: iso.substring(lengthOfLength + length),
+        value: paddingFix(iso.substring(lengthOfLength, end), length, valueLength, padding )
+      }
+    }
+    const getFixedLengthField = (iso, metadata) => {
+      const { nibbleLength, encoding, padding } = metadata;
+      const length = encoding === 'hex'
+          ? nibbleLength % 2 === 1 ? nibbleLength + 1 : nibbleLength
+          : nibbleLength * 2;
+
+      const valueLength = encoding === 'hex' ? nibbleLength : nibbleLength * 2;
+      return {
+        rest: iso.substring(length),
+        value: paddingFix(iso.substring(0, length), length, valueLength, padding )
+      }
+    }
+
+    const plainIso = document.getElementById("plainIso").value.toLowerCase();
+    const bitmap = plainIso.substring(18, 34)
+    const iso = plainIso.substring(34);
+    const bitmapArray = bitmap.split("").map(bit => parseInt(bit, 16).toString(2).padStart(4, '0')).join("");
+
+    bitmapArray.split("").map((value, index) => {
+      document.getElementById(`bit-${index+1}`).checked = "1" === value;
+    })
+
+    const values = metadata.reduce(({ rest, fields }, meta) => {
+      if (bitmapArray[meta.index - 1] === "0") return {rest, fields};
+
+      const field = meta.lengthMeta.type === 'var'
+          ? getVariableLengthField(rest, meta)
+          : getFixedLengthField(rest, meta);
+      const fieldValue = meta.encoding === 'ascii' ?  hexToAscii(field.value) : field.value ;
+
+      fields.push({index: meta.index, value:fieldValue});
+      return {rest: field.rest, fields }
+    }, {rest: iso, fields: []})
+
+    console.log(values)
+  }
+
+
+  const metadata = [
+    {
+      padding: 'end',
+      index: 2,
+      nibbleLength: 19,
+      encoding: 'hex',
+      lengthMeta: { type: 'var', length: 2, },
+    },
+    {
+      index: 3,
+      nibbleLength: 6 ,
+      encoding: 'hex',
+      lengthMeta: { type: 'fixed', length: 2, },
+    },
+    {
+      index: 4,
+      nibbleLength: 12 ,
+      encoding: 'hex',
+      lengthMeta: { type: 'fixed', length: 2, },
+    },
+    {
+      index: 11,
+      nibbleLength: 6 ,
+      encoding: 'hex',
+      lengthMeta: { type: 'fixed', length: 2, },
+    },
+    {
+      index: 12,
+      nibbleLength: 6 ,
+      encoding: 'hex',
+      lengthMeta: { type: 'fixed' },
+    },
+    {
+      index: 13,
+      nibbleLength: 4 ,
+      encoding: 'hex',
+      lengthMeta: { type: 'fixed' },
+    },
+    {
+      index: 14,
+      nibbleLength: 4 ,
+      encoding: 'hex',
+      lengthMeta: { type: 'fixed' },
+    },
+    {
+      index: 22,
+      nibbleLength: 3 ,
+      encoding: 'hex',
+      lengthMeta: { type: 'fixed' },
+    },
+    {
+      index: 23,
+      nibbleLength: 3 ,
+      encoding: 'hex',
+      lengthMeta: { type: 'fixed' },
+    },
+    {
+      index: 24,
+      nibbleLength: 3 ,
+      encoding: 'hex',
+      lengthMeta: { type: 'fixed' },
+    },
+    {
+      index: 25,
+      nibbleLength: 2 ,
+      encoding: 'hex',
+      lengthMeta: { type: 'fixed' },
+    },
+    {
+      padding: 'end',
+      index: 35,
+      nibbleLength: 37,
+      encoding: 'hex',
+      lengthMeta: { type: 'var', length: 2, },
+    },
+    {
+      index: 37,
+      nibbleLength: 12,
+      encoding: 'ascii',
+      lengthMeta: { type: 'fixed' },
+    },
+    {
+      index: 38,
+      nibbleLength: 6,
+      encoding: 'ascii',
+      lengthMeta: { type: 'fixed' },
+    },
+    {
+      index: 39,
+      nibbleLength: 2,
+      encoding: 'ascii',
+      lengthMeta: { type: 'fixed' },
+    },
+    {
+      index: 41,
+      nibbleLength: 8,
+      encoding: 'ascii',
+      lengthMeta: { type: 'fixed' },
+    },
+    {
+      index: 42,
+      nibbleLength: 15,
+      encoding: 'ascii',
+      lengthMeta: { type: 'fixed' },
+    },
+    {
+      index: 44,
+      nibbleLength: 25,
+      encoding: 'ascii',
+      lengthMeta: { type: 'var', length: 2 },
+    },
+    {
+      index: 45,
+      nibbleLength: 76,
+      encoding: 'ascii',
+      lengthMeta: { type: 'var', length: 2 },
+    },
+    {
+      index: 52,
+      nibbleLength: 8,
+      encoding: 'hex',
+      lengthMeta: { type: 'fixed' },
+    },
+    {
+      index: 54,
+      nibbleLength: 120,
+      encoding: 'ascii',
+      lengthMeta: { type: 'fixed' },
+    },
+    {
+      index: 55,
+      nibbleLength: 255,
+      encoding: 'binary',
+      lengthMeta: { type: 'var', length: 4 },
+    },
+    {
+      index: 60,
+      nibbleLength: 999,
+      encoding: 'ascii',
+      lengthMeta: { type: 'var', length: 4 },
+    },
+    {
+      index: 61,
+      nibbleLength: 999,
+      encoding: 'ascii',
+      lengthMeta: { type: 'var', length: 4 },
+    },
+    {
+      index: 62,
+      nibbleLength: 999,
+      encoding: 'ascii',
+      lengthMeta: { type: 'var', length: 4 },
+    },
+    {
+      index: 63,
+      nibbleLength: 999,
+      encoding: 'ascii',
+      lengthMeta: { type: 'var', length: 4 },
+    },
+    {
+      index: 64,
+      nibbleLength: 999,
+      encoding: 'ascii',
+      lengthMeta: { type: 'var', length: 4 },
+    },
+
+
+  ]
+
+</script>
+</body>
+</html>
