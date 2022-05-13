@@ -970,6 +970,26 @@
           document.getElementById(`bit-${index + 1}`).checked = "1" === value;
         });
 
+        const header = `<div class="col-auto">
+                        <div class="input-group input-group-sm mb-1">
+                          <div class="input-group-prepend"><div class="input-group-text">Header</div></div>
+                          <input type="text" class="form-control" value="${plainIso.substring(
+                            4,
+                            14
+                          )}"/>
+                        </div>
+                    </div>`;
+
+        const mti = `<div class="col-auto">
+                        <div class="input-group input-group-sm mb-1">
+                          <div class="input-group-prepend"><div class="input-group-text">MTI</div></div>
+                          <input type="text" class="form-control" value="${plainIso.substring(
+                            14,
+                            18
+                          )}"/>
+                        </div>
+                    </div>`;
+
         const values = metadata
           .reduce(
             ({ rest, fields }, meta) => {
@@ -1005,7 +1025,7 @@
           .join("");
 
         document.getElementById("result").innerHTML =
-          "<h5>Field values</h5>" + values;
+          "<h5>Field values</h5>" + header + mti + values;
         console.log(values);
       }
 
