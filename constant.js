@@ -117,7 +117,7 @@ const metadata = [
   },
   {
     index: 52,
-    nibbleLength: 8,
+    nibbleLength: 16,
     encoding: 'hex',
     lengthMeta: { type: 'fixed' },
   },
@@ -166,9 +166,15 @@ const metadata = [
 ];
 
 const INDEX = {
-  TDPU: { start: 4, end: 14 },
-  MTI: { start: 14, end: 18 },
-  BITMAP: { start: 18, end: 34 },
+  NO_TDPU: {
+    MTI: { start: 4, end: 8 },
+    BITMAP: { start: 8, end: 24 },
+  },
+  WITH_TDPU: {
+    TDPU: { start: 4, end: 14 },
+    MTI: { start: 14, end: 18 },
+    BITMAP: { start: 18, end: 34 },
+  },
 };
 
 const RADIX = {

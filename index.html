@@ -31,7 +31,11 @@
               >
             </div>
           </div>
-          <div class="col-12 col-sm-10 align-items-start">
+          <div class="col-12 col-sm-10">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" id="tdpu-check" checked />
+              <label class="form-check-label" for="tdpu-check"> TDPU </label>
+            </div>
             <button type="button" class="btn btn-primary visually-hidden mb-3" onclick="analyze()">
               Analyze
             </button>
@@ -559,8 +563,10 @@
         };
 
         const plainIso = document.getElementById('plainIso').value.toLowerCase();
+        const isTDPU = document.getElementById('tdpu-check').checked;
+        const indexOfIsoHeader = isTDPU ? INDEX.WITH_TDPU : INDEX.NO_TDPU;
         const bitmapArray = plainIso
-          .substring(INDEX.BITMAP.start, INDEX.BITMAP.end)
+          .substring(indexOfIsoHeader.BITMAP.start, indexOfIsoHeader.BITMAP.end)
           .split('')
           .map((bit) => parseInt(bit, RADIX.HEX).toString(RADIX.BIN).padStart(4, '0'))
           .join('')
@@ -591,7 +597,7 @@
               fields.push({ index: meta.index, value: fieldValue });
               return { rest: field.rest, fields };
             },
-            { rest: plainIso.substring(34), fields: [] },
+            { rest: plainIso.substring(indexOfIsoHeader.BITMAP.end), fields: [] },
           );
 
           const values = isoFields.fields
@@ -599,8 +605,17 @@
             .map(({ index, value }) => getFieldHtml(index.toString(), value))
             .join('');
 
-          const header = getFieldHtml('TDPU', plainIso.substring(INDEX.TDPU.start, INDEX.TDPU.end));
-          const mti = getFieldHtml('MTI', plainIso.substring(INDEX.MTI.start, INDEX.MTI.end));
+          const header = getFieldHtml(
+            'TDPU',
+            isTDPU
+              ? plainIso.substring(indexOfIsoHeader.TDPU.start, indexOfIsoHeader.TDPU.end)
+              : 'No TDPU',
+          );
+          const mti = getFieldHtml(
+            'MTI',
+            plainIso.substring(indexOfIsoHeader.MTI.start, indexOfIsoHeader.MTI.end),
+          );
+
           document.getElementById('result').innerHTML =
             H5_FIELD_VALUE +
             (isoFields.rest
