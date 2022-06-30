@@ -4,17 +4,19 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
       rel="stylesheet"
-      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
       crossorigin="anonymous"
     />
+    <link href="override.css" rel="stylesheet" />
     <title>Encryption / Decryption</title>
   </head>
   <body>
     <div class="container">
       <form>
         <div class="row">
+          <!-- Encryption Part - Not Ready -->
           <div class="col-5 align-items-center visually-hidden">
             <div class="p-3">
               <label for="completeBuffer" class="form-label">Complete Buffer</label>
@@ -23,7 +25,9 @@
               >
             </div>
           </div>
-          <div class="col-12 col-sm-10 align-items-center">
+
+          <!-- ISO Message -->
+          <div class="col-12 col-sm-11 align-items-center">
             <div class="py-3">
               <label for="plainIso" class="form-label">Plain ISO</label>
               <textarea class="form-control" id="plainIso" rows="3">
@@ -31,22 +35,34 @@
               >
             </div>
           </div>
+
+          <!-- Filters -->
           <div class="col-12 col-sm-10">
             <div class="form-check form-check-inline">
               <input class="form-check-input" type="checkbox" id="tdpu-check" checked />
               <label class="form-check-label" for="tdpu-check"> TDPU </label>
             </div>
-            <button type="button" class="btn btn-primary visually-hidden mb-3" onclick="analyze()">
-              Analyze
-            </button>
             <button type="button" class="btn btn-primary mb-3" onclick="parse()">Parse</button>
           </div>
         </div>
+
+        <!-- Result -->
         <div id="parse-result" class="row">
-          <div id="result" class="col-10 col-md-5 p-3">
+          <div id="result" class="col-10 col-md-6 p-3">
             <h5>Field values</h5>
           </div>
           <div id="bitmap" class="col-10 col-md-5 p-3">
+            <h5>Bitmap Details</h5>
+            <div class="input-group input-group-sm mb-1">
+              <span class="input-group-text">Hex</span>
+              <input type="text" id="binary-bitmap" class="form-control" value="" />
+            </div>
+
+            <div class="input-group input-group-sm mb-1">
+              <span class="input-group-text">Bin</span>
+              <input type="text" id="hex-bitmap" class="form-control" value="" />
+            </div>
+
             <table class="table table-sm">
               <tr>
                 <td>
@@ -467,165 +483,25 @@
             </table>
           </div>
         </div>
-        <div id="parsed" class="row">
-          <div class="col-5 align-items-center">
-            <div class="p-3">
-              <label for="encryptedBuffer" class="form-label">Encrypted Portion of Buffer</label>
-              <textarea
-                class="form-control"
-                id="encryptedBuffer"
-                rows="3"
-                style="color: blue"
-              ></textarea>
-            </div>
-          </div>
-          <div class="col-5 align-items-center">
-            <div class="p-3">
-              <label for="plainBuffer" class="form-label">Need To Be Encrypted</label>
-              <textarea class="form-control" id="plainBuffer" rows="3"></textarea>
-            </div>
-          </div>
-        </div>
       </form>
     </div>
 
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"
+      integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js"
+      integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy"
+      crossorigin="anonymous"
+    ></script>
     <script src="constant.js" type="text/javascript"></script>
-    <script type="text/javascript">
-      function analyze() {
-        const completeBuffer = document.getElementById('completeBuffer').value.toLowerCase();
-        const plainIso = document.getElementById('plainIso').value.toLowerCase();
-        const encryptedPortion = document.getElementById('encryptedBuffer');
-        const plainBuffer = document.getElementById('plainBuffer');
-
-        const startEncrypt = completeBuffer.substring(34, 38);
-        const length = completeBuffer.substring(38, 42);
-
-        const start = 42 + parseInt(startEncrypt, 16) * 2;
-        const end = start + parseInt(length, 16) * 2;
-
-        const plain = plainIso
-          .replace(completeBuffer.substring(42, start), '*')
-          .replace(completeBuffer.substring(end), '^');
-        const clearText = plain.substring(plain.indexOf('*') + 1, plain.indexOf('^'));
-        console.log(plain);
-
-        encryptedPortion.value = completeBuffer.substring(start, end);
-        plainBuffer.value = clearText;
-        parse();
-      }
-
-      function parse() {
-        /**
-         * Determines which side of nibble padding need to be trimmed.
-         */
-        const removePadding = (iso, fieldLength, valueLength, padding) => {
-          if (fieldLength < valueLength) throw 'Invalid length';
-          if (fieldLength <= valueLength) return iso;
-
-          if (!!padding && padding === 'end') return iso.substring(0, valueLength);
-          else return iso.substring(iso.length - valueLength);
-        };
-
-        /**
-         * Each hex is = 1 nibble byte
-         */
-        const getFieldLength = (length, encoding) => {
-          if (encoding !== 'hex') return length * 2;
-          return length % 2 === 1 ? length + 1 : length;
-        };
-
-        const getVariableLengthField = (iso, metadata) => {
-          const { lengthMeta, encoding, padding } = metadata;
-
-          const lengthOfLength = lengthMeta.length;
-          const rawLength = parseInt(iso.substring(0, lengthOfLength));
-
-          const fieldLength = getFieldLength(rawLength, encoding);
-          const valueLength = encoding === 'hex' ? rawLength : rawLength * 2;
-          const fieldHex = iso.substring(lengthOfLength, lengthOfLength + fieldLength);
-
-          return {
-            rest: iso.substring(lengthOfLength + fieldLength),
-            value: removePadding(fieldHex, fieldLength, valueLength, padding),
-          };
-        };
-
-        const getFixedLengthField = (iso, metadata) => {
-          const { nibbleLength, encoding, padding } = metadata;
-          const fieldLength = getFieldLength(nibbleLength, encoding);
-          const fieldHex = iso.substring(0, fieldLength);
-
-          const valueLength = encoding === ENCODING.HEX ? nibbleLength : nibbleLength * 2;
-          return {
-            rest: iso.substring(fieldLength),
-            value: removePadding(fieldHex, fieldLength, valueLength, padding),
-          };
-        };
-
-        const plainIso = document.getElementById('plainIso').value.toLowerCase();
-        const isTDPU = document.getElementById('tdpu-check').checked;
-        const indexOfIsoHeader = isTDPU ? INDEX.WITH_TDPU : INDEX.NO_TDPU;
-        const bitmapArray = plainIso
-          .substring(indexOfIsoHeader.BITMAP.start, indexOfIsoHeader.BITMAP.end)
-          .split('')
-          .map((bit) => parseInt(bit, RADIX.HEX).toString(RADIX.BIN).padStart(4, '0'))
-          .join('')
-          .split('');
-
-        bitmapArray.forEach((value, index) => {
-          document.getElementById(`bit-${index + 1}`).checked = '1' === value;
-        });
-
-        try {
-          const isoFields = metadata.reduce(
-            ({ rest, fields }, meta) => {
-              if (bitmapArray[meta.index - 1] === '0') return { rest, fields };
-
-              const field =
-                meta.lengthMeta.type === 'var'
-                  ? getVariableLengthField(rest, meta)
-                  : getFixedLengthField(rest, meta);
-
-              const fieldValue =
-                meta.encoding === ENCODING.ASCII
-                  ? field.value
-                      .match(/(..?)/g)
-                      .map((hex) => String.fromCharCode(parseInt(hex, 16)))
-                      .join('')
-                  : field.value;
-
-              fields.push({ index: meta.index, value: fieldValue });
-              return { rest: field.rest, fields };
-            },
-            { rest: plainIso.substring(indexOfIsoHeader.BITMAP.end), fields: [] },
-          );
-
-          const values = isoFields.fields
-            .sort((f1, f2) => f1.index - f2.index)
-            .map(({ index, value }) => getFieldHtml(index.toString(), value))
-            .join('');
-
-          const header = getFieldHtml(
-            'TDPU',
-            isTDPU
-              ? plainIso.substring(indexOfIsoHeader.TDPU.start, indexOfIsoHeader.TDPU.end)
-              : 'No TDPU',
-          );
-          const mti = getFieldHtml(
-            'MTI',
-            plainIso.substring(indexOfIsoHeader.MTI.start, indexOfIsoHeader.MTI.end),
-          );
-
-          document.getElementById('result').innerHTML =
-            H5_FIELD_VALUE +
-            (isoFields.rest
-              ? `<p style="color: darkred">ISO cannot be fully parsed.</p>`
-              : header + mti + values);
-        } catch (e) {
-          document.getElementById('result').innerHTML =
-            H5_FIELD_VALUE + `<p style="color: darkred">Error ${e.toString()}</p>`;
-        }
-      }
-    </script>
+    <script src="parser.js" type="text/javascript"></script>
   </body>
 </html>

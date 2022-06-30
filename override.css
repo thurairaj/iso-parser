@@ -1,0 +1,12 @@
+#bitmap .table td {
+    padding:0em;
+}
+
+#parse-result .input-group-text, #bitmap .input-group-text {
+    padding: 0.2rem 0.75rem;
+}
+
+.custom-tooltip {
+    --bs-tooltip-bg: #e9ecef;
+    --bs-tooltip-color: #212529;
+}
